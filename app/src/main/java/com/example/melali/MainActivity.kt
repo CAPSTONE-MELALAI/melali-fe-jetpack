@@ -23,10 +23,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.melali.presentation.detail.DetailScreen
 import com.example.melali.presentation.home.HomeScreen
+import com.example.melali.presentation.list.ListScreen
 import com.example.melali.util.SnackbarHandler
 import com.example.melali.presentation.splash.SplashScreen
 import com.example.melali.ui.theme.MelaliTheme
@@ -129,6 +133,23 @@ class MainActivity : ComponentActivity() {
 
                                 composable("home"){
                                     HomeScreen(navController = navController)
+                                }
+
+                                composable("list"){
+                                    ListScreen(navController = navController)
+                                }
+
+                                composable(
+                                    "detail/{index}",
+                                    arguments = listOf(
+                                        navArgument("index"){
+                                            type = NavType.LongType
+                                        }
+                                    )
+                                ){
+                                    val index = it.arguments?.getLong("index") ?: 0L
+
+                                    DetailScreen(navController = navController, index = index)
                                 }
                             }
 
