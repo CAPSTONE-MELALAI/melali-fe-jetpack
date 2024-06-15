@@ -1,6 +1,7 @@
-package com.example.core_ui.util
+package com.example.melali.util
 
-import com.example.core_ui.mainviewmodel.mainUiViewModel
+import com.example.melali.mainUiViewModel
+
 
 object SnackbarHandler {
     fun showSnackbar(

@@ -6,7 +6,8 @@ import com.example.melali.model.request.RegisterRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.RegisterResponse
 import com.example.melali.model.response.ResponseWrapper
-import com.example.storyapp.util.getResponse
+import com.example.melali.model.response.SingleDestinationResponse
+import com.example.melali.util.getResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -66,5 +67,14 @@ class Repository @Inject constructor(
             setBody(body)
             contentType(ContentType.Application.Json)
         }
+    }
+
+    suspend fun getAllDestination(
+        onSuccess: (ResponseWrapper<List<SingleDestinationResponse>>) -> Unit,
+        onFailed: (Exception) -> Unit
+    ) = getResponse<ResponseWrapper<List<SingleDestinationResponse>>>(
+        onSuccess, onFailed
+    ){
+        client.get("https://capstone-melali.et.r.appspot.com/destinations/")
     }
 }
