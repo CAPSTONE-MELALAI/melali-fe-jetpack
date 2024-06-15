@@ -1,13 +1,16 @@
 package com.example.melali.data
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.melali.model.request.LoginRequest
 import com.example.melali.model.request.RegisterRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.RegisterResponse
 import com.example.melali.model.response.ResponseWrapper
 import com.example.melali.model.response.SingleDestinationResponse
+import com.example.melali.model.response.UserResponse
 import com.example.melali.util.getResponse
+import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -30,6 +33,24 @@ class Repository @Inject constructor(
         .apply()
 
     fun isLogin() = (pref.getString("token", "") ?: "").isNotEmpty()
+
+    fun saveUserToLocal(user: UserResponse) = pref.edit().putString("user", Gson().toJson(user))
+
+    fun getUserFromLocal(): UserResponse? = try {
+        val user = pref.getString("user", "") ?: ""
+        Gson().fromJson(user, UserResponse::class.java)
+    }catch (e: Exception){
+        Log.e("ERROR", e.toString())
+        null
+    }
+
+    suspend fun getUserByEmail(
+        email: String,
+        onSuccess: (ResponseWrapper<UserResponse>) -> Unit,
+        onFailed: (Exception) -> Unit
+    ) = getResponse<ResponseWrapper<UserResponse>>(onSuccess, onFailed){
+        client.get("https://capstone-melali.et.r.appspot.com/user/$email")
+    }
 
     fun setTokenManually(token: String) {
         client

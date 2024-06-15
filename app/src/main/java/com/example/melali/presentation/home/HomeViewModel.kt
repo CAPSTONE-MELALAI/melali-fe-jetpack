@@ -11,4 +11,6 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository
 ): ViewModel(){
     val searchInput = mutableStateOf("")
+    val user = repository.getUserFromLocal()
+    val showShouldLoginPopup = mutableStateOf(false)
 }

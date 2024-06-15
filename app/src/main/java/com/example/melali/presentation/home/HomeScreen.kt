@@ -20,7 +20,9 @@ import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,7 +45,14 @@ fun HomeScreen(navController: NavController) {
             horizontalArrangement = Arrangement.End
         ) {
             OutlinedIconButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    if (viewModel.user == null) {
+                        viewModel.showShouldLoginPopup.value = true
+                        return@OutlinedIconButton
+                    }
+
+                    //TODO NAVIGATE TO PROFIL
+                },
                 shape = CircleShape
             ) {
                 Icon(imageVector = Icons.Default.Person, contentDescription = "")
@@ -66,13 +75,27 @@ fun HomeScreen(navController: NavController) {
             }
         )
 
-        Column (
+        Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
-        ){
-            Text(
-                modifier = Modifier.padding(horizontal = 24.dp),
-                text = "Rekomendasi untuk Anda"
-            )
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    text = "Rekomendasi untuk Anda"
+                )
+
+                TextButton(
+                    onClick = {
+                        navController.navigate("list")
+                    }
+                ) {
+                    Text(text = "Lihat Semua")
+                }
+            }
 
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -95,7 +118,14 @@ fun HomeScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            onClick = { /*TODO*/ }
+            onClick = {
+                if (viewModel.user == null) {
+                    viewModel.showShouldLoginPopup.value = true
+                    return@Button
+                }
+
+                //TODO NAVIGATE TO BUAT JADWAL
+            }
         ) {
             Text(text = "Buat Jadwal Baru")
         }
