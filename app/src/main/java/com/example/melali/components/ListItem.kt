@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,23 +19,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecommendationItem(
+fun ListItem(
+    modifier: Modifier = Modifier,
     url: String,
     name: String,
     location: String
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp
 
     ElevatedCard(
-        modifier = Modifier
+        modifier = modifier
             .height(200.dp)
-            .width(screenWidth.dp * 7 / 10),
+            .fillMaxWidth(),
         onClick = { /*TODO*/ },
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
     ) {
@@ -52,7 +54,12 @@ fun RecommendationItem(
                     .padding(16.dp)
             ) {
                 Text(text = name, style = TextStyle(fontSize = 16.sp))
-                Text(text = location, style = TextStyle(fontSize = 12.sp))
+                Text(
+                    text = location,
+                    style = TextStyle(fontSize = 12.sp),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
 
