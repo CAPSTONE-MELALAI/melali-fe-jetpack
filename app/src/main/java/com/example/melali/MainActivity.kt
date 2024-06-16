@@ -27,6 +27,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.melali.presentation.home.HomeScreen
+import com.example.melali.presentation.login.LoginScreen
+import com.example.melali.presentation.register.RegisterScreen
 import com.example.melali.util.SnackbarHandler
 import com.example.melali.presentation.splash.SplashScreen
 import com.example.melali.ui.theme.MelaliTheme
@@ -121,7 +123,7 @@ class MainActivity : ComponentActivity() {
                         Box(modifier = Modifier.padding(it)){
                             NavHost(
                                 navController = navController,
-                                startDestination = "splash"
+                                startDestination = "login"
                             ) {
                                 composable("splash") {
                                     SplashScreen(navController = navController)
@@ -130,8 +132,14 @@ class MainActivity : ComponentActivity() {
                                 composable("home"){
                                     HomeScreen(navController = navController)
                                 }
-                            }
 
+                                composable("login"){
+                                    LoginScreen(navController = navController)
+                                }
+                                composable("signup"){
+                                    RegisterScreen(navController = navController)
+                                }
+                            }
                             PullRefreshIndicator(
                                 modifier = Modifier.align(Alignment.TopCenter),
                                 refreshing = mainUiViewModel.showLoading.value || mainUiViewModel.showRefresh.value,
