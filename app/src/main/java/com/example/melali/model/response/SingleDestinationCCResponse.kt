@@ -1,6 +1,6 @@
 package com.example.melali.model.response
 
-data class SingleDestinationResponse(
+data class SingleDestinationCCResponse(
     val address: String,
     val place: String,
     val is_accessibility: Int,

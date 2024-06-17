@@ -27,14 +27,15 @@ import coil.compose.AsyncImage
 fun RecommendationItem(
     url: String,
     name: String,
-    location: String
+    location: String,
+    onClick:() -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
     ElevatedCard(
         modifier = Modifier
-            .height(200.dp)
-            .width(screenWidth.dp * 7 / 10),
+            .height(280.dp)
+            .width(screenWidth.dp * 5 / 10),
         onClick = { /*TODO*/ },
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
     ) {

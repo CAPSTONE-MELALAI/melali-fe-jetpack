@@ -7,7 +7,8 @@ import com.example.melali.model.request.RegisterRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.RegisterResponse
 import com.example.melali.model.response.ResponseWrapper
-import com.example.melali.model.response.SingleDestinationResponse
+import com.example.melali.model.response.SingleDestinationCCResponse
+import com.example.melali.model.response.SingleDestinationMLResponse
 import com.example.melali.model.response.UserResponse
 import com.example.melali.util.getResponse
 import com.google.gson.Gson
@@ -39,7 +40,7 @@ class Repository @Inject constructor(
     fun getUserFromLocal(): UserResponse? = try {
         val user = pref.getString("user", "") ?: ""
         Gson().fromJson(user, UserResponse::class.java)
-    }catch (e: Exception){
+    } catch (e: Exception) {
         Log.e("ERROR", e.toString())
         null
     }
@@ -48,7 +49,7 @@ class Repository @Inject constructor(
         email: String,
         onSuccess: (ResponseWrapper<UserResponse>) -> Unit,
         onFailed: (Exception) -> Unit
-    ) = getResponse<ResponseWrapper<UserResponse>>(onSuccess, onFailed){
+    ) = getResponse<ResponseWrapper<UserResponse>>(onSuccess, onFailed) {
         client.get("https://capstone-melali.et.r.appspot.com/user/$email")
     }
 
@@ -90,12 +91,23 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun getAllDestination(
-        onSuccess: (ResponseWrapper<List<SingleDestinationResponse>>) -> Unit,
+    suspend fun getAllDestinationFromCC(
+        onSuccess: (ResponseWrapper<List<SingleDestinationCCResponse>>) -> Unit,
         onFailed: (Exception) -> Unit
-    ) = getResponse<ResponseWrapper<List<SingleDestinationResponse>>>(
+    ) = getResponse<ResponseWrapper<List<SingleDestinationCCResponse>>>(
         onSuccess, onFailed
-    ){
+    ) {
         client.get("https://capstone-melali.et.r.appspot.com/destinations/")
+    }
+
+    suspend fun getDestinationRecommendation(
+        userIndex: Long,
+        onSuccess: (ResponseWrapper<List<SingleDestinationMLResponse>>) -> Unit,
+        onFailed: (Exception) -> Unit
+    ) = getResponse(
+        onSuccess,
+        onFailed
+    ) {
+        client.post("https://melali.337ubaid.my.id/might-like/$userIndex")
     }
 }

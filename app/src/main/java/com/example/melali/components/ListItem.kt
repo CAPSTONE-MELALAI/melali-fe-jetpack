@@ -30,14 +30,15 @@ fun ListItem(
     modifier: Modifier = Modifier,
     url: String,
     name: String,
-    location: String
+    location: String,
+    onClick:() -> Unit
 ) {
 
     ElevatedCard(
         modifier = modifier
             .height(200.dp)
             .fillMaxWidth(),
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize().background(Color.LightGray)) {
