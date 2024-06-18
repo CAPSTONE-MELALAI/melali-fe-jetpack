@@ -31,6 +31,8 @@ import androidx.navigation.navArgument
 import com.example.melali.presentation.detail.DetailScreen
 import com.example.melali.presentation.home.HomeScreen
 import com.example.melali.presentation.list.ListScreen
+import com.example.melali.presentation.login.LoginScreen
+import com.example.melali.presentation.register.RegisterScreen
 import com.example.melali.util.SnackbarHandler
 import com.example.melali.presentation.splash.SplashScreen
 import com.example.melali.ui.theme.MelaliTheme
