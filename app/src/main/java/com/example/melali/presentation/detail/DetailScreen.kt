@@ -1,10 +1,13 @@
 package com.example.melali.presentation.detail
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,11 +37,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -51,6 +57,8 @@ fun DetailScreen(
     navController: NavController,
     index: Long
 ) {
+
+    val context = LocalContext.current
 
     var readMoreClicked by remember {
         mutableStateOf(false)
@@ -70,9 +78,11 @@ fun DetailScreen(
             },
             onFailed = {})
     }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState())) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -138,10 +148,44 @@ fun DetailScreen(
                 )
             }
         }
-        Column(modifier = Modifier.padding(32.dp)) {
-            Text(text = "About", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 32.dp, end = 24.dp, bottom = 6.dp, top = 32.dp),
+            verticalAlignment = Alignment.CenterVertically,
+
+        ) {
+            Text(
+                text = "${destinasi?.address}",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.weight(1f)
+
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+            Button(onClick = {
+                val mapIntentUri = Uri.parse("${destinasi?.url}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, mapIntentUri)
+                context.startActivity(mapIntent)
+            }, contentPadding = PaddingValues(horizontal = 12.dp)) {
+                Text(text = "Buka Map", style= MaterialTheme.typography.labelLarge)
+            }
+        }
+        Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp)) {
+            Text(
+                text = "About",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "${destinasi?.description}", maxLines = if (readMoreClicked) Int.MAX_VALUE else 5, textAlign = TextAlign.Justify, overflow = TextOverflow.Ellipsis)
+            Text(
+                text = "${destinasi?.description}",
+                maxLines = if (readMoreClicked) Int.MAX_VALUE else 5,
+                textAlign = TextAlign.Justify,
+                overflow = TextOverflow.Ellipsis
+            )
             Text(
                 text = if (!readMoreClicked) "Read More" else "Show Less",
                 color = Color.Blue,
@@ -150,20 +194,17 @@ fun DetailScreen(
                 })
 
         }
-        Row(modifier = Modifier.fillMaxSize().padding(32.dp)) {
-            Text(text = "${destinasi?.address}", modifier = Modifier.weight(1f))
-            Text(text = "Buka Map", modifier = Modifier.clickable {
 
-            })
-        }
 
         Row {
             Column {
-                Box{
-                    Box(modifier = Modifier
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .height(48.dp)
-                        .width(48.dp))
+                Box {
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .height(48.dp)
+                            .width(48.dp)
+                    )
                 }
             }
         }
