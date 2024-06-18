@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
                         Box(modifier = Modifier.padding(it)){
                             NavHost(
                                 navController = navController,
-                                startDestination = "splash"
+                                startDestination = "home"
                             ) {
                                 composable("splash") {
                                     SplashScreen(navController = navController)
