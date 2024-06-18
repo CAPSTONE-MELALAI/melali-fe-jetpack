@@ -38,6 +38,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.core_ui.util.LoadingHandler
+import com.example.core_ui.util.rememberLoadingState
 import com.example.melali.components.RecommendationItem
 import com.example.melali.model.request.YouMightLikeRequest
 
@@ -45,6 +47,7 @@ import com.example.melali.model.request.YouMightLikeRequest
 @Composable
 fun HomeScreen(navController: NavController) {
     val viewModel = hiltViewModel<HomeViewModel>()
+    val loadingState= rememberLoadingState()
 
     LaunchedEffect(key1 = viewModel.user) {
         if (viewModel.user == null) {

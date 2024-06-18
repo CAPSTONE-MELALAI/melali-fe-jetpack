@@ -32,5 +32,4 @@ class LoginViewModel @Inject constructor(
             repository.saveToken(token)
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package com.example.melali.presentation.register
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -8,6 +9,7 @@ import com.example.melali.model.request.RegisterRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.RegisterResponse
 import com.example.melali.model.response.ResponseWrapper
+import com.example.melali.model.response.UserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +17,7 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
-
+    val showSheet = mutableStateOf(false)
     fun register(
         body: RegisterRequest,
         onSuccess: (ResponseWrapper<RegisterResponse>) -> Unit,
@@ -26,8 +28,10 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    fun saveToken(t:String){
-        repository.saveToken(t)
+    fun saveUserData(token: String, userData: UserResponse) {
+        viewModelScope.launch {
+            repository.saveUserToLocal(userData)
+            repository.saveToken(token)
+        }
     }
-
 }

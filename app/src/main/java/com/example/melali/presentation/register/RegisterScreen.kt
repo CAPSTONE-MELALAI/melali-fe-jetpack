@@ -15,11 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,27 +42,128 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.core_ui.util.rememberLoadingState
 import com.example.melali.R
 import com.example.melali.model.request.RegisterRequest
+import com.example.melali.model.response.UserResponse
 import com.example.melali.util.SnackbarHandler
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(navController: NavController) {
+    val loadingHandler = rememberLoadingState()
     val viewModel = hiltViewModel<RegisterViewModel>()
-    var username by remember {
-        mutableStateOf("")
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val formFilled = remember {
+        derivedStateOf {
+            username.isNotEmpty()
+                    && email.isNotEmpty()
+                    && phoneNumber.isNotEmpty()
+                    && password.isNotEmpty()
+        }
     }
+    val categories = listOf(
+        "Sejarah",
+        "Wisata Alam",
+        "Pantai",
+        "Hiburan",
+        "Taman"
+    )
+    val categorySelected = remember { mutableStateListOf<Int>() }
 
-    var email by remember {
-        mutableStateOf("")
-    }
+    if (viewModel.showSheet.value) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                viewModel.showSheet.value = false
+            }
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = "Pilih Kategori",
+                    style = MaterialTheme.typography.titleMedium
+                )
 
-    var phoneNumber by remember {
-        mutableStateOf("")
-    }
+                Column {
+                    categories.forEachIndexed { index, s ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Checkbox(
+                                checked = categorySelected.contains(index),
+                                onCheckedChange = {
+                                    if (it) {
+                                        categorySelected.add(index)
+                                    } else {
+                                        categorySelected.remove(index)
+                                    }
+                                }
+                            )
 
-    var password by remember {
-        mutableStateOf("")
+                            Text(text = s)
+                        }
+                    }
+                }
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        if (categorySelected.size < 3) {
+                            SnackbarHandler.showSnackbar("Pilih minimal 3 kategori")
+                            return@Button
+                        }
+                        loadingHandler.show()
+                        val body = RegisterRequest(
+                            username = username,
+                            email = email,
+                            password = password,
+                            confPassword = password,
+                            phoneNumber = phoneNumber,
+                            category = categorySelected
+                        )
+                        viewModel.register(body,
+                            onSuccess = {
+                                SnackbarHandler.showSnackbar("Berhasil")
+                                it.data?.let { res ->
+                                    viewModel.saveUserData(
+                                        token = res.token,
+                                        userData = UserResponse(
+                                            uid = res.uid,
+                                            phoneNumber = res.phoneNumber,
+                                            indexUser = res.indexUser,
+                                            category = res.category,
+                                            email = res.email,
+                                            username = res.username
+                                        )
+                                    )
+                                }
+                                loadingHandler.dismissLoading()
+                                navController.navigate("home") {
+                                    popUpTo(navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onFailed = {
+                                loadingHandler.dismissLoading()
+                                viewModel.showSheet.value = false
+                                SnackbarHandler.showSnackbar(it.message.toString())
+                            }
+                        )
+                    }
+                ) {
+                    Text(text = "Lanjutkan")
+                }
+            }
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -122,20 +228,12 @@ fun RegisterScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = {
-                    val body = RegisterRequest(
-                        username = username,
-                        email = email,
-                        password = password,
-                        confPassword = password,
-                        phoneNumber = phoneNumber
-                    )
-                    viewModel.register(body,
-                        onSuccess = {
-                            SnackbarHandler.showSnackbar("Berhasil")
-                        },
-                        onFailed = {
-                            SnackbarHandler.showSnackbar(it.message.toString())
-                        })
+                    if (!formFilled.value) {
+                        SnackbarHandler.showSnackbar("Pastikan semua data terisi")
+                        return@Button
+                    }
+
+                    viewModel.showSheet.value = true
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,8 +246,8 @@ fun RegisterScreen(navController: NavController) {
             Row {
                 Text(text = "Already have an account? ")
                 Text(text = "Login", color = Color.Blue, modifier = Modifier.clickable {
-                    navController.navigate("login")
                     navController.popBackStack()
+                    navController.navigate("login")
                 })
             }
 

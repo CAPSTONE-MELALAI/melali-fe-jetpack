@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.core_ui.util.rememberLoadingState
 import com.example.melali.R
 import com.example.melali.model.request.LoginRequest
 import com.example.melali.model.response.UserResponse
@@ -43,7 +44,7 @@ import com.example.melali.util.SnackbarHandler
 @Composable
 fun LoginScreen(navController: NavController) {
     val viewModel = hiltViewModel<LoginViewModel>()
-
+    val loadingHandler = rememberLoadingState()
     var email by remember {
         mutableStateOf("")
     }
@@ -118,8 +119,7 @@ fun LoginScreen(navController: NavController) {
             Button(
                 onClick = {
                     val body = LoginRequest(email, password)
-                    Log.d("Check", email)
-                    Log.d("Check", password)
+                    loadingHandler.show()
                     viewModel.login(body,
                         onSuccess = {
                             SnackbarHandler.showSnackbar("Berhasil Login")
@@ -136,6 +136,7 @@ fun LoginScreen(navController: NavController) {
                                     )
                                 )
                             }
+                            loadingHandler.dismissLoading()
                             navController.navigate("home"){
                                 popUpTo(navController.graph.id){
                                     inclusive = true
@@ -144,6 +145,7 @@ fun LoginScreen(navController: NavController) {
                         },
                         onFailed = {
                             SnackbarHandler.showSnackbar(it.message.toString())
+                            loadingHandler.dismissLoading()
                         })
                 }, modifier = Modifier
                     .fillMaxWidth()
@@ -199,8 +201,8 @@ fun LoginScreen(navController: NavController) {
             Row {
                 Text(text = "Don't have account?")
                 Text(text = "Create Now", color = Color.Blue, modifier = Modifier.clickable {
-                    navController.navigate("register")
                     navController.popBackStack()
+                    navController.navigate("register")
                 })
             }
         }
