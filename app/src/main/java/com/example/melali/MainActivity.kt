@@ -141,6 +141,14 @@ class MainActivity : ComponentActivity() {
                                     ListScreen(navController = navController)
                                 }
 
+                                composable("login"){
+                                    LoginScreen(navController = navController)
+                                }
+
+                                composable("register"){
+                                    RegisterScreen(navController = navController)
+                                }
+
                                 composable(
                                     "detail/{index}",
                                     arguments = listOf(

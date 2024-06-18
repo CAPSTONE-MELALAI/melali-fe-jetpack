@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.melali.model.request.LoginRequest
 import com.example.melali.model.request.RegisterRequest
+import com.example.melali.model.request.YouMightLikeRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.RegisterResponse
 import com.example.melali.model.response.ResponseWrapper
@@ -35,7 +36,7 @@ class Repository @Inject constructor(
 
     fun isLogin() = (pref.getString("token", "") ?: "").isNotEmpty()
 
-    fun saveUserToLocal(user: UserResponse) = pref.edit().putString("user", Gson().toJson(user))
+    fun saveUserToLocal(user: UserResponse) = pref.edit().putString("user", Gson().toJson(user)).apply()
 
     fun getUserFromLocal(): UserResponse? = try {
         val user = pref.getString("user", "") ?: ""
@@ -101,13 +102,24 @@ class Repository @Inject constructor(
     }
 
     suspend fun getDestinationRecommendation(
-        userIndex: Long,
+        body:YouMightLikeRequest,
         onSuccess: (ResponseWrapper<List<SingleDestinationMLResponse>>) -> Unit,
         onFailed: (Exception) -> Unit
     ) = getResponse(
         onSuccess,
         onFailed
     ) {
-        client.post("https://melali.337ubaid.my.id/might-like/$userIndex")
+        client.post("https://melali.337ubaid.my.id/might-like"){
+            setBody(body)
+            contentType(ContentType.Application.Json)
+        }
+    }
+
+    suspend fun getDestinationByIndex(
+        detinationIndex:Long,
+        onSuccess:(ResponseWrapper<SingleDestinationCCResponse>) -> Unit,
+        onFailed: (Exception) -> Unit
+    ) = getResponse(onSuccess, onFailed){
+        client.get("https://capstone-melali.et.r.appspot.com/destinations/$detinationIndex")
     }
 }

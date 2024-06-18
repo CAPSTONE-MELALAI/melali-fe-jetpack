@@ -2,7 +2,6 @@ package com.example.melali.presentation.login
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,9 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,14 +31,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.melali.R
 import com.example.melali.model.request.LoginRequest
+import com.example.melali.model.response.UserResponse
 import com.example.melali.util.SnackbarHandler
 
 @Composable
@@ -126,7 +123,19 @@ fun LoginScreen(navController: NavController) {
                     viewModel.login(body,
                         onSuccess = {
                             SnackbarHandler.showSnackbar("Berhasil Login")
-                            viewModel.saveToken(it.data?.token.toString())
+                            it.data?.let {res ->
+                                viewModel.saveUserData(
+                                    token = res.token,
+                                    userData = UserResponse(
+                                        uid = res.uid,
+                                        phoneNumber = res.phoneNumber,
+                                        indexUser = res.indexUser,
+                                        category = res.category,
+                                        email = res.email,
+                                        username = res.username
+                                    )
+                                )
+                            }
                             navController.navigate("home"){
                                 popUpTo(navController.graph.id){
                                     inclusive = true
@@ -190,20 +199,11 @@ fun LoginScreen(navController: NavController) {
             Row {
                 Text(text = "Don't have account?")
                 Text(text = "Create Now", color = Color.Blue, modifier = Modifier.clickable {
-                    navController.navigate("signup") {
-
-                    }
+                    navController.navigate("register")
+                    navController.popBackStack()
                 })
             }
         }
     }
 
-}
-
-@Preview
-@Composable
-fun miawmiaw() {
-    Box(modifier = Modifier.background(Color.White)) {
-        LoginScreen(navController = rememberNavController())
-    }
 }

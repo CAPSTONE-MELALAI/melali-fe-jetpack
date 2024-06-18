@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.melali.data.Repository
+import com.example.melali.model.request.YouMightLikeRequest
 import com.example.melali.model.response.SingleDestinationCCResponse
 import com.example.melali.model.response.SingleDestinationMLResponse
 import com.example.melali.util.SnackbarHandler
@@ -38,10 +39,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getAllDestinationFromML(userIndex: Long) {
+    fun getAllDestinationFromML(userIndex: Long, category: List<Int>) {
         viewModelScope.launch {
             repository.getDestinationRecommendation(
-                userIndex,
+                YouMightLikeRequest(userIndex, category),
                 onSuccess = {
                     it.data?.let {
                         destinationML.addAll(it)

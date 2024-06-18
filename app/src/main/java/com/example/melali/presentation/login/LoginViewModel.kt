@@ -6,6 +6,7 @@ import com.example.melali.data.Repository
 import com.example.melali.model.request.LoginRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.ResponseWrapper
+import com.example.melali.model.response.UserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
@@ -19,13 +20,17 @@ class LoginViewModel @Inject constructor(
         body: LoginRequest,
         onSuccess: (ResponseWrapper<LoginResponse>) -> Unit,
         onFailed: (Exception) -> Unit
-    ){ viewModelScope.launch {
-            repository.login(body,onSuccess,onFailed)
+    ) {
+        viewModelScope.launch {
+            repository.login(body, onSuccess, onFailed)
         }
     }
 
-    fun saveToken(token: String){
-        repository.saveToken(token)
+    fun saveUserData(token: String, userData: UserResponse) {
+        viewModelScope.launch {
+            repository.saveUserToLocal(userData)
+            repository.saveToken(token)
+        }
     }
 
 }
