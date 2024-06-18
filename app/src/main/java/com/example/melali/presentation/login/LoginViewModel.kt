@@ -20,13 +20,17 @@ class LoginViewModel @Inject constructor(
         body: LoginRequest,
         onSuccess: (ResponseWrapper<LoginResponse>) -> Unit,
         onFailed: (Exception) -> Unit
-    ){ viewModelScope.launch {
-            repository.login(body,onSuccess,onFailed)
+    ) {
+        viewModelScope.launch {
+            repository.login(body, onSuccess, onFailed)
         }
     }
 
-    fun saveToken(token: String){
-        repository.saveToken(token)
+    fun saveUserData(token: String, userData: UserResponse) {
+        viewModelScope.launch {
+            repository.saveUserToLocal(userData)
+            repository.saveToken(token)
+        }
     }
 
     fun saveUserToLocal(user:UserResponse){

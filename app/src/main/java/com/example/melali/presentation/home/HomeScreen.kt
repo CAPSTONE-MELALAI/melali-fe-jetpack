@@ -39,17 +39,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.melali.components.RecommendationItem
+import com.example.melali.model.request.YouMightLikeRequest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
     val viewModel = hiltViewModel<HomeViewModel>()
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = viewModel.user) {
         if (viewModel.user == null) {
             viewModel.getAllDestinationFromCC()
         } else {
-            viewModel.getAllDestinationFromML(viewModel.user.indexUser)
+            viewModel.getAllDestinationFromML(
+                viewModel.user.indexUser,
+                viewModel.user.category
+            )
         }
     }
 

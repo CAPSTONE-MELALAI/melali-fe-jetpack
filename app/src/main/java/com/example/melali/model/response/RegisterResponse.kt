@@ -6,6 +6,8 @@ data class RegisterResponse(
     val username: String,
     val email: String,
     val phoneNumber: String,
-    val createdAt:String,
-    val updatedAt:String
+    val age: Int,
+    val gender: String,
+    val indexUser: Long,
+    val category: List<Int>
 )

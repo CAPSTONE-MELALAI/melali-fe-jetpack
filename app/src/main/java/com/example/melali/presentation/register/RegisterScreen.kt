@@ -149,6 +149,7 @@ fun RegisterScreen(navController: NavController) {
                 Text(text = "Already have an account? ")
                 Text(text = "Login", color = Color.Blue, modifier = Modifier.clickable {
                     navController.navigate("login")
+                    navController.popBackStack()
                 })
             }
 
