@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.melali.R
 import com.example.melali.model.request.LoginRequest
+import com.example.melali.model.response.UserResponse
 import com.example.melali.util.SnackbarHandler
 
 @Composable
@@ -127,6 +128,13 @@ fun LoginScreen(navController: NavController) {
                         onSuccess = {
                             SnackbarHandler.showSnackbar("Berhasil Login")
                             viewModel.saveToken(it.data?.token.toString())
+//                            val user = UserResponse(
+//                                uid= ,
+//                                phoneNumber = ,
+//                                indexUser = ,
+//
+//                            )
+//                            viewModel.saveUserToLocal(user = )
                             navController.navigate("home"){
                                 popUpTo(navController.graph.id){
                                     inclusive = true

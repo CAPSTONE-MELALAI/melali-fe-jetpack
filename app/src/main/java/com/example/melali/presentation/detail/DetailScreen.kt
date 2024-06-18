@@ -10,4 +10,6 @@ fun DetailScreen(
     index: Long
 ) {
     val viewModel = hiltViewModel<DetailViewModel>()
+
+
 }

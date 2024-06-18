@@ -6,6 +6,7 @@ import com.example.melali.data.Repository
 import com.example.melali.model.request.LoginRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.ResponseWrapper
+import com.example.melali.model.response.UserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
@@ -26,6 +27,12 @@ class LoginViewModel @Inject constructor(
 
     fun saveToken(token: String){
         repository.saveToken(token)
+    }
+
+    fun saveUserToLocal(user:UserResponse){
+        viewModelScope.launch {
+            repository.saveUserToLocal(user)
+        }
     }
 
 }
