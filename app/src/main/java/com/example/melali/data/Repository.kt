@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.melali.model.request.LoginRequest
 import com.example.melali.model.request.RegisterRequest
+import com.example.melali.model.request.SchedulingRequest
 import com.example.melali.model.request.YouMightLikeRequest
 import com.example.melali.model.response.LoginResponse
 import com.example.melali.model.response.RegisterResponse
@@ -115,11 +116,24 @@ class Repository @Inject constructor(
         }
     }
 
+
+
     suspend fun getDestinationByIndex(
         detinationIndex:Long,
         onSuccess:(ResponseWrapper<SingleDestinationCCResponse>) -> Unit,
         onFailed: (Exception) -> Unit
     ) = getResponse(onSuccess, onFailed){
         client.get("https://capstone-melali.et.r.appspot.com/destinations/$detinationIndex")
+    }
+
+    suspend fun getSchedule(
+        body: SchedulingRequest,
+        onSuccess: (ResponseWrapper<List<SingleDestinationMLResponse>>) -> Unit,
+        onFailed: (Exception) -> Unit
+    ) = getResponse(onSuccess, onFailed){
+        client.post("https://melali.337ubaid.my.id/recommendation"){
+            setBody(body)
+            contentType(ContentType.Application.Json)
+        }
     }
 }

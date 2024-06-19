@@ -33,6 +33,7 @@ import com.example.melali.presentation.home.HomeScreen
 import com.example.melali.presentation.list.ListScreen
 import com.example.melali.presentation.login.LoginScreen
 import com.example.melali.presentation.register.RegisterScreen
+import com.example.melali.presentation.scheduling.SchedulingScreen
 import com.example.melali.util.SnackbarHandler
 import com.example.melali.presentation.splash.SplashScreen
 import com.example.melali.ui.theme.MelaliTheme
@@ -160,6 +161,10 @@ class MainActivity : ComponentActivity() {
                                     val index = it.arguments?.getLong("index") ?: 0L
 
                                     DetailScreen(navController = navController, index = index)
+                                }
+
+                                composable("scheduling"){
+                                    SchedulingScreen(navController = navController)
                                 }
                             }
 

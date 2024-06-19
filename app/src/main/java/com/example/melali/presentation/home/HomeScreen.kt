@@ -213,7 +213,7 @@ fun HomeScreen(navController: NavController) {
                     return@Button
                 }
 
-                //TODO NAVIGATE TO BUAT JADWAL
+                navController.navigate("scheduling")
             }
         ) {
             Text(text = "Buat Jadwal Baru")
