@@ -200,6 +200,9 @@ fun SchedulingScreen(navController: NavController) {
                     }
                 }
             )
+        },
+        bottomBar = {
+
         }
     ) {
         LazyColumn(
@@ -231,7 +234,7 @@ fun SchedulingScreen(navController: NavController) {
                             ) { item ->
                                 Row(
                                     modifier = Modifier
-                                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                                        .padding(horizontal = 16.dp)
                                         .clickable {
                                             if (viewModel.selectedDestination.any { it.index == item.index }) {
                                                 viewModel.selectedDestination.removeIf { it.index == item.index }
@@ -260,38 +263,34 @@ fun SchedulingScreen(navController: NavController) {
                             }
                         }
                     }
-                    Row {
-                        FlowRow(
-                            modifier = Modifier
-                                .padding(top = 8.dp)
-                                .fillMaxWidth()
-                                .weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            viewModel.selectedDestination.forEach { item ->
-                                Card {
-                                    Row(
-                                        modifier = Modifier.padding(
-                                            vertical = 4.dp,
-                                            horizontal = 10.dp
-                                        ),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        Text(text = item.place)
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        viewModel.selectedDestination.forEach { item ->
+                            Card(modifier = Modifier.fillMaxWidth()) {
+                                Row(
+                                    modifier = Modifier.padding(
+                                        vertical = 4.dp,
+                                        horizontal = 10.dp
+                                    ),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text(modifier = Modifier.fillMaxWidth().weight(1f),text = item.place)
 
-                                        Icon(
-                                            modifier = Modifier
-                                                .size(18.dp)
-                                                .clickable {
-                                                    viewModel.selectedDestination.removeIf { it.index == item.index }
-                                                },
-                                            imageVector = Icons.Default.Delete,
-                                            contentDescription = "",
-                                            tint = Color.Red
-                                        )
-                                    }
+                                    Icon(
+                                        modifier = Modifier
+                                            .size(18.dp)
+                                            .clickable {
+                                                viewModel.selectedDestination.removeIf { it.index == item.index }
+                                            },
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "",
+                                        tint = Color.Red
+                                    )
                                 }
                             }
                         }
@@ -380,9 +379,14 @@ fun SchedulingScreen(navController: NavController) {
                                             .fillMaxWidth(),
                                         onClick = {
                                             context.startActivity(Intent().apply {
-                                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                                action =
+                                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                                                 data =
-                                                    Uri.fromParts("package", context.packageName, null)
+                                                    Uri.fromParts(
+                                                        "package",
+                                                        context.packageName,
+                                                        null
+                                                    )
                                             })
                                         }
                                     ) {
