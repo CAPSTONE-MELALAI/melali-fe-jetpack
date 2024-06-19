@@ -33,10 +33,5 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun saveUserToLocal(user:UserResponse){
-        viewModelScope.launch {
-            repository.saveUserToLocal(user)
-        }
-    }
 
 }
