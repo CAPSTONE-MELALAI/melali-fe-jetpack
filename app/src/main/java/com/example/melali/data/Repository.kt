@@ -128,7 +128,7 @@ class Repository @Inject constructor(
 
     suspend fun getSchedule(
         body: SchedulingRequest,
-        onSuccess: (ResponseWrapper<List<SingleDestinationMLResponse>>) -> Unit,
+        onSuccess: (ResponseWrapper<List<List<SingleDestinationMLResponse>>>) -> Unit,
         onFailed: (Exception) -> Unit
     ) = getResponse(onSuccess, onFailed){
         client.post("https://melali.337ubaid.my.id/recommendation"){

@@ -1,6 +1,7 @@
 package com.example.melali.presentation.scheduling
 
 import android.util.Log
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -13,13 +14,14 @@ import com.example.melali.model.response.SingleDestinationMLResponse
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.internal.toLongOrDefault
 import javax.inject.Inject
 
 @HiltViewModel
 class SchedulingViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
-    val recommendationResult = mutableStateOf<List<SingleDestinationMLResponse>?>(null)
+    val recommendationResult = mutableStateOf<List<List<SingleDestinationMLResponse>>?>(null)
     val selectedDestination = mutableStateListOf<SingleDestinationCCResponse>()
     val destinationInput = mutableStateOf("")
     val destinations = mutableStateListOf<SingleDestinationCCResponse>()
@@ -29,6 +31,12 @@ class SchedulingViewModel @Inject constructor(
     val locationSelectedName = mutableStateOf("")
     val isDisability = mutableStateOf(0)
     val showMapPopup = mutableStateOf(false)
+
+    val allFilled = derivedStateOf {
+        budgetInput.value.toLongOrDefault(0L) > 0
+                && hariInput.value.toLongOrDefault(0L) >= 1
+                && latLngSelected.value != null
+    }
 
     fun getAllDestinations() {
         viewModelScope.launch {
@@ -47,7 +55,7 @@ class SchedulingViewModel @Inject constructor(
 
     fun getRecommendation(
         body: SchedulingRequest,
-        onSuccess: (ResponseWrapper<List<SingleDestinationMLResponse>>) -> Unit,
+        onSuccess: (ResponseWrapper<List<List<SingleDestinationMLResponse>>>) -> Unit,
         onFailed: (Exception) -> Unit
     ) {
         viewModelScope.launch {
