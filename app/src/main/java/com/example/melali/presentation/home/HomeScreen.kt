@@ -115,8 +115,7 @@ fun HomeScreen(navController: NavController) {
                         viewModel.showShouldLoginPopup.value = true
                         return@OutlinedIconButton
                     }
-
-                    //TODO NAVIGATE TO PROFIL
+                    navController.navigate("profile")
                 },
                 shape = CircleShape
             ) {
