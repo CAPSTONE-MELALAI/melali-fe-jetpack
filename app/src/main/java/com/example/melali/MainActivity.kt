@@ -128,7 +128,7 @@ class MainActivity : ComponentActivity() {
                         Box(modifier = Modifier.padding(it)){
                             NavHost(
                                 navController = navController,
-                                startDestination = "splash"
+                                startDestination = "home"
                             ) {
                                 composable("splash") {
                                     SplashScreen(navController = navController)
@@ -140,6 +140,13 @@ class MainActivity : ComponentActivity() {
 
                                 composable("list"){
                                     ListScreen(navController = navController)
+                                }
+                                composable("login"){
+                                    LoginScreen(navController = navController)
+                                }
+                                
+                                composable("signup"){
+                                    RegisterScreen(navController = navController)
                                 }
 
                                 composable("login"){

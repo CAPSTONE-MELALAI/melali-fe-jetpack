@@ -19,7 +19,7 @@ fun SplashScreen(navController: NavController) {
 
     LaunchedEffect(key1 = true) {
         viewModel.afterDelay {
-            navController.navigate("home") {
+            navController.navigate("login") {
                 popUpTo(navController.graph.id) {
                     inclusive = true
                 }
