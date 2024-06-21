@@ -568,10 +568,6 @@ fun SchedulingScreen(navController: NavController) {
 
                             Column {
                                 Text(text = item.place)
-                                Text(
-                                    text = item.address,
-                                    style = MaterialTheme.typography.labelMedium
-                                )
                             }
                         }
                     }
