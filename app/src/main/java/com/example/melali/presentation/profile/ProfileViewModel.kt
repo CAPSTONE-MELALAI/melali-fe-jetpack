@@ -26,4 +26,8 @@ class ProfileViewModel @Inject constructor(
         }
         return user
     }
+
+    fun removeUser(){
+        repository.removeUserLocally()
+    }
 }

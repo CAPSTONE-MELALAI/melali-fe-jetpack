@@ -32,6 +32,7 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             repository.saveUserToLocal(userData)
             repository.saveToken(token)
+            repository.setTokenManually(token)
         }
     }
 }

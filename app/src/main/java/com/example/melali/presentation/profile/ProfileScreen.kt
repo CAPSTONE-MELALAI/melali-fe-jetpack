@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,15 +52,13 @@ fun ProfileScreen(navController: NavController) {
                 .height(100.dp)
                 .width(100.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-        ) {
+                .background(MaterialTheme.colorScheme.secondaryContainer)) {
             AsyncImage(
                 model = R.drawable.user,
                 contentDescription = "",
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer)
             )
         }
-
         Spacer(modifier = Modifier.height(24.dp))
         Row{
             Text(text = "Name", modifier = Modifier.width(86.dp))
@@ -72,6 +71,19 @@ fun ProfileScreen(navController: NavController) {
         Row {
             Text(text = "Phone", modifier = Modifier.width(86.dp))
             Text(text = user.value?.phoneNumber.toString(), modifier = Modifier.weight(1f))
+        }
+
+        Button(
+            onClick = {
+                viewModel.removeUser()
+                navController.navigate("home"){
+                    popUpTo(navController.graph.id){
+                        inclusive = true
+                    }
+                }
+            }
+        ) {
+            Text(text = "Keluar")
         }
     }
 }

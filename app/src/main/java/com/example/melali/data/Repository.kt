@@ -35,8 +35,6 @@ class Repository @Inject constructor(
         .putString("token", token)
         .apply()
 
-    fun isLogin() = (pref.getString("token", "") ?: "").isNotEmpty()
-
     fun saveUserToLocal(user: UserResponse) = pref.edit().putString("user", Gson().toJson(user)).apply()
 
     fun getUserFromLocal(): UserResponse? = try {
@@ -47,12 +45,8 @@ class Repository @Inject constructor(
         null
     }
 
-    suspend fun getUserByEmail(
-        email: String,
-        onSuccess: (ResponseWrapper<UserResponse>) -> Unit,
-        onFailed: (Exception) -> Unit
-    ) = getResponse<ResponseWrapper<UserResponse>>(onSuccess, onFailed) {
-        client.get("https://capstone-melali.et.r.appspot.com/user/$email")
+    fun removeUserLocally(){
+        pref.edit().remove("user").apply()
     }
 
     fun setTokenManually(token: String) {
@@ -60,10 +54,6 @@ class Repository @Inject constructor(
             .plugin(Auth)
             .bearer { this.loadTokens { BearerTokens(token, "") } }
     }
-
-    fun saveEmail(email: String) = pref.edit().putString("email", email).apply()
-
-    fun getEmail() = pref.getString("email", "") ?: ""
 
     suspend fun login(
         body: LoginRequest,
