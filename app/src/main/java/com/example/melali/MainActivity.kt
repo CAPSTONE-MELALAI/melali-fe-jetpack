@@ -32,6 +32,7 @@ import com.example.melali.presentation.detail.DetailScreen
 import com.example.melali.presentation.home.HomeScreen
 import com.example.melali.presentation.list.ListScreen
 import com.example.melali.presentation.login.LoginScreen
+import com.example.melali.presentation.profile.ProfileScreen
 import com.example.melali.presentation.register.RegisterScreen
 import com.example.melali.presentation.scheduling.SchedulingScreen
 import com.example.melali.util.SnackbarHandler
@@ -156,7 +157,9 @@ class MainActivity : ComponentActivity() {
                                 composable("register"){
                                     RegisterScreen(navController = navController)
                                 }
-
+                                composable("profile"){
+                                    ProfileScreen(navController = navController)
+                                }
                                 composable(
                                     "detail/{index}",
                                     arguments = listOf(

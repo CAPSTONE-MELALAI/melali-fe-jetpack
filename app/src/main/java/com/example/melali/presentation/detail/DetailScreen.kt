@@ -94,8 +94,6 @@ fun DetailScreen(
                 .clip(
                     RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
                 )
-
-
         ) {
             Box() {
                 AsyncImage(
@@ -120,9 +118,7 @@ fun DetailScreen(
                     )
                     .alpha(0.3f)
             ) {
-
             }
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
